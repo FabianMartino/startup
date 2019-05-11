@@ -63,5 +63,9 @@ html {
  .screen.fade-in .title {
    margin-left: 0;
  }
- .screen.fade-in:hover {
+
+ span{
+   text-align: center;
  }
+
+ /*for the last point in the guide i decide to leave the @media from grid in grid.css since it consider three screen sizes and one of them is mobile so i can avoid collisions*/ 
