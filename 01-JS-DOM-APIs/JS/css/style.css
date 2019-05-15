@@ -10,7 +10,7 @@ body{
   padding: 0%;
 }
 
-header, footer{
+header{
   color: white;
   background-color: black;
   height: 15%;
@@ -20,13 +20,25 @@ h1,p{
   padding: 0%;
 }
 .content{
-  height: 70%;
+  height: 85%;
   text-align: center;
+  display: inline-flex;
 }
 
 section{
+  width: 30%;
   text-align: center;
   padding: 1%;
+}
+
+aside{
+  width: 40%;
+  text-align: center;
+  padding: 1%;
+}
+
+aside ul{
+  text-align: left;
 }
 
 #hiddenSection {
