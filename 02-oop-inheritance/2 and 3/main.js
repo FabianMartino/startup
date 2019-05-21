@@ -94,6 +94,7 @@
      */
     emit(eventName){
       if(this.events[eventName]) {
+        // FIXME: should be able to accept others functions
         this.events[eventName].forEach(fn => fn.log(eventName));
       }
     };
