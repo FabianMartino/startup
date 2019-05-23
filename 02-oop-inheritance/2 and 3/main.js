@@ -42,7 +42,8 @@
 
   class Logger{
     constructor(){
-      this.listen = document.addEventListener("loggin", function(e){ log(e)});
+      let self = this;
+      this.listen = document.addEventListener("loggin", function(e){self.log(e.detail)}, false);
     };
     log(info){
       console.log("The "+info+" event has been emitted");
@@ -69,21 +70,12 @@
 
     /**
      * Definition of the function inherit from eventEmitter but only accept event from movie
-     * @param {String} eventName 
-     * @param {object} callback 
+     * @param {String} eventName
      */
-    on(eventName, callback){
+    on(eventName){
       if (eventName === "play"||eventName === "pause"|| eventName === "resume") {
         if( !this.events[eventName] ) {
           this.events[eventName] = [];
-        }
-        if(this.events[eventName]) {
-          for( var i = 0; i < this.events[eventName].length; i++){ 
-            if ( this.events[eventName][i] === callback) {
-              return;
-            }
-          }
-          this.events[eventName].push(callback);
         }
       }
     };
@@ -94,10 +86,20 @@
      */
     emit(eventName){
       if(this.events[eventName]) {
-        // FIXME: should be able to accept others functions
-        this.events[eventName].forEach(fn => fn.log(eventName));
+        var event = new CustomEvent("loggin", { 'detail': eventName });
+        document.dispatchEvent(event);
       }
     };
+
+     /**
+     * definition of the function inherit from eventEmitter to unsubscribe
+     * @param {*} eventName 
+     */
+    off(eventName){
+      if( this.events[eventName] ){
+        delete this.events[eventName];
+      }
+    }
 
     /**
      * add one or more actors to the cast in movie
@@ -124,6 +126,6 @@
 
   // test eventEmitter
   let l = new Logger();
-  m1.on("play", l);  
+  m1.on("play");  
   m1.play();
 
