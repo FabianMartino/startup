@@ -1,9 +1,15 @@
 let infoValue = document.getElementById("textArea");
-
+/**
+ * listener for cleaning the content of the local and indexeddb storage
+ */
 let clear = document.getElementById("btn-clearStorage").addEventListener("click" , function() {
   window.localStorage.clear();
   removeDBElement();
 });
+
+/**
+ * listener for saving the content of the text area into local and indexeddb storage
+ */
 let save = document.getElementById("btn-saveText").addEventListener("click" , function() {
   window.localStorage.setItem('Info', infoValue.value);
   addDBElement();
@@ -33,3 +39,20 @@ function removeDBElement(){
   objectStore.clear();
 }
  
+//listener for the drag and drop of text files
+infoValue.addEventListener('drop', previewFile, false)
+
+
+/**
+ * upload one text file and upload his content into the text box
+ * @param {*} file 
+ */
+function previewFile(file) {
+  event.preventDefault();
+  var file = event.dataTransfer.files;
+  let reader = new FileReader()
+  reader.readAsText(file[0]);
+  reader.onloadend = function() {
+    infoValue.value = reader.result;
+  }
+}
