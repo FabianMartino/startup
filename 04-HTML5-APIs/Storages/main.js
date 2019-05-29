@@ -1,3 +1,5 @@
+window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+
 let infoValue = document.getElementById("textArea");
 /**
  * listener for cleaning the content of the local and indexeddb storage
@@ -5,6 +7,7 @@ let infoValue = document.getElementById("textArea");
 let clear = document.getElementById("btn-clearStorage").addEventListener("click" , function() {
   window.localStorage.clear();
   removeDBElement();
+  infoValue.value = "";
 });
 
 /**
@@ -42,16 +45,16 @@ function removeDBElement(){
 //listener for the drag and drop of text files
 infoValue.addEventListener('drop', previewFile, false)
 
-
 /**
- * upload one text file and upload his content into the text box
+ * upload one text file and upload his content into the text area
  * @param {*} file 
  */
 function previewFile(file) {
   event.preventDefault();
-  var file = event.dataTransfer.files;
+  infoValue.value = "";
+  let files = event.dataTransfer.files;
   let reader = new FileReader()
-  reader.readAsText(file[0]);
+  reader.readAsText(files[0]);
   reader.onloadend = function() {
     infoValue.value = reader.result;
   }
