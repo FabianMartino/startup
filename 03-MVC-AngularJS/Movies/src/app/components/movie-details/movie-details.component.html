@@ -1,0 +1,19 @@
+<div>
+  <a class="nav" [routerLink]="['/']" >Back</a>
+<div *ngIf="movie; then thenTemplate; else elseTemplate"></div>
+  <ng-template #thenTemplate>
+      <h2>The detail for the movie: {{movie.title}}</h2>
+  <ul>
+    <li>year: {{movie.year}}.</li>
+    <li>duration: {{movie.duration}} min.</li>
+    <li>cast: <ul *ngFor="let person of movie.cast">
+      <li>{{person}}.</li>
+    </ul></li>
+  </ul>
+  </ng-template>
+  <ng-template #elseTemplate>
+    <p>404: movie not found</p>
+  </ng-template>
+</div>
+
+

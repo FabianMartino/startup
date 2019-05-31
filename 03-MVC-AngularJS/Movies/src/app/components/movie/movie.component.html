@@ -1,0 +1,12 @@
+<div class="container">
+  <h2>Movie List</h2>
+  <ul *ngFor="let movie of movies">
+    <li class="line">
+      <p (click)="onSelect(movie)">{{movie.title}} </p>
+      <button (click)="onEditMovie(movie)" class="btn">Edit</button>
+      <button (click)="onDelete(movie)" class="btn">Delete</button>
+    </li>
+  </ul>
+
+  <a [routerLink]="['/addMovie']" class="nav" >Add new movie</a>
+</div>
