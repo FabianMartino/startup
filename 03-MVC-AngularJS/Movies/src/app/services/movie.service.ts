@@ -1,35 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Movie } from '../models/Movie';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
-  //The id carry the new id for the new movies that's why doesn't decrease so that can avoid conflict
-  id:number = 3;
-  //Load two movies
-  private movies:Movie[] = [      {id: 1,
-    title: 'Inside Man',
-    duration: 129,
-    year:2006,
-    cast:['Denzel Washington','Jodie Foster','Clive Owen']
-    },
-    {id: 2,
-    title: 'John Wick',
-    duration: 101,
-    year: 2014,
-    cast:['Keanu Reeves','Willem Dafoe','John Leguizamo'] 
-    }
-  ];
+  //Next id use in a new movie
+  private nextId:number;
   
-
-  constructor() {}
+/**
+ * Get the movies and find the next valid id for use
+ */
+  constructor() {
+    let movies = this.getMovies();    
+    if(movies.length === 0){
+      this.nextId = 0;
+    }
+    else{
+      let maxId = movies[movies.length-1].id;
+      this.nextId = maxId+1;
+    }
+  }
 
   /**
    * Gets all the movies
    */
   getMovies(){
-    return this.movies;
+    let localStorageItem = JSON.parse(localStorage.getItem("movies"))
+    return localStorageItem === null ? []: localStorageItem.movies;
   }
 
   /**
@@ -37,8 +36,9 @@ export class MovieService {
    * @param id 
    */
   getSerchMovie(id:number):Movie{
+    let localMovies:Movie[] = this.getMovies();
     let result:Movie;
-    this.movies.forEach(movie => {
+    localMovies.forEach(movie => {
       if (movie.id == id) {
         result = movie;
       }
@@ -50,7 +50,7 @@ export class MovieService {
    * Return the id variable
    */
   getNewId():number{
-    return this.id
+    return this.nextId;
   }
 
 
@@ -59,7 +59,48 @@ export class MovieService {
    * @param newMovie 
    */
   addMovie(newMovie:Movie){
-    this.movies.push(newMovie);
-    this.id++;
+    let localMovies:Movie[] = this.getMovies();
+    localMovies.push(newMovie);    
+    this.setLocalStorageMovies(localMovies);
+    this.nextId++;
   }
+
+  /**
+   * Save movies id the local storage
+   * @param movies 
+   */
+  private setLocalStorageMovies(movies: Movie[]):void{
+    localStorage.setItem("movies",JSON.stringify({"movies": movies}))
+  }
+
+  /**
+   * Remove the movie with a specific id
+   * @param id 
+   */
+  public removeMovie(id:number):void{
+    let localMovies = this.getMovies();
+    for( var i = 0; i < localMovies.length; i++){ 
+      if ( localMovies[i].id === id) {
+        localMovies.splice(i, 1); 
+        i--;
+      }
+    }
+    this.setLocalStorageMovies(localMovies);    
+  }
+
+  /**
+   * save the changes from a edited movie
+   */
+  public editMovie(movie:Movie):void{
+    let localMovies = this.getMovies();
+    for( var i = 0; i < localMovies.length; i++){ 
+      if ( localMovies[i].id === movie.id) {
+        localMovies.splice(i, 1); 
+        i--;
+      }
+    }
+    localMovies.push(movie);
+    this.setLocalStorageMovies(localMovies);
+  }
+
 }

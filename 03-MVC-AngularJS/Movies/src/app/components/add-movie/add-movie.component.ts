@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Movie } from 'src/app/models/Movie';
 import { MovieService } from 'src/app/services/movie.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-movie',
@@ -13,7 +14,7 @@ export class AddMovieComponent implements OnInit {
   duration:number;
   cast:string;
 
-  constructor(private movieService:MovieService) { }
+  constructor(private movieService:MovieService,private router:Router) { }
 
   ngOnInit() {
   }
@@ -21,6 +22,7 @@ export class AddMovieComponent implements OnInit {
    * Check to see if the new data is not empty and submit the new movie
    */
   onSubmit(){
+    let messageResult = document.getElementById("result");
     if(this.cast && this.duration && this.title && this.year){
       let newMovie:Movie = {id: this.movieService.getNewId(),
         title: this.title,
@@ -29,10 +31,12 @@ export class AddMovieComponent implements OnInit {
         cast: this.cast.split(",")
         }
       this.movieService.addMovie(newMovie);
+      messageResult.classList.add("success")
+      messageResult.innerHTML = "your movie was added correcly"
     }
     else{
-      alert("Error in one or more elements ")
+      messageResult.classList.add("error")
+      messageResult.innerHTML = "Error in one or more fields of the new movie"
     }
   }
-
 }

@@ -31,14 +31,8 @@ export class MovieComponent implements OnInit {
    * @param movie 
    */
   onDelete(movie){
-    if( this.movies ) {
-      for( var i = 0; i < this.movies.length; i++){ 
-        if ( this.movies[i] === movie) {
-          this.movies.splice(i, 1); 
-          i--;
-        }
-      }
-    }
+    this.movieService.removeMovie(movie.id);
+    this.movies = this.movieService.getMovies();
   }
   /**
    * Send you to the edit movies form with the id of the movie to edit
