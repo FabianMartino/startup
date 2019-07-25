@@ -1,0 +1,3 @@
+6) To add weight to the global font definition and win over the classes you can define it in body with the specific properties
+
+7) You can use !important Attribute even do is not recommended
